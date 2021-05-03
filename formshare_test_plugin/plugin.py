@@ -60,8 +60,7 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     # IConfig
     def update_config(self, config):
         # We add here the templates of the plugin to the config
-        u.add_templates_directory(config, "/home/cquiros/data/projects2017/personal/software/"
-                                          "formshare_test_plugin/formshare_test_plugin/templates")
+        u.add_templates_directory(config, "/opt")
 
     def get_translation_directory(self):
         module = sys.modules["formshare_test_plugin"]
@@ -72,8 +71,7 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
 
     # IResources
     def add_libraries(self, config):
-        libraries = [u.add_library("test_api", "/home/cquiros/data/projects2017/personal/software/"
-                                               "formshare_test_plugin/formshare_test_plugin/resources")]
+        libraries = [u.add_library("test_api", "/opt")]
         return libraries
 
     def add_js_resources(self, config):
