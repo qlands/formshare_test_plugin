@@ -1,0 +1,2 @@
+include *.txt *.ini *.cfg *.rst
+recursive-include formshare_test_plugin *.ico *.png *.css *.gif *.jpg *.pt *.txt *.mak *.mako *.js *.html *.xml *.jinja2
