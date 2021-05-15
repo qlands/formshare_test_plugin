@@ -274,10 +274,10 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
         return context
 
     # ILogOut
-    def before_log_out(self, request, user):
+    def before_log_out(self, request, user, continue_logout):
         return True
 
-    def after_log_out(self, request, user):
+    def after_log_out(self, request, user, redirect_url, logout_headers):
         pass
 
 
@@ -429,17 +429,17 @@ class FormShareTestAssistantGroupPlugin(plugins.SingletonPlugin):
 
     # IJSONSubmission
     def before_processing_submission(
-            self, request, user, project, form, assistant, json_file
+        self, request, user, project, form, assistant, json_file
     ):
         return 0, ""
 
     def after_processing_submission_in_repository(
-            self, request, user, project, form, assistant, submission, error, json_file
+        self, request, user, project, form, assistant, submission, error, json_file
     ):
         pass
 
     def after_processing_submission_not_in_repository(
-                self, request, user, project, form, assistant, submission, json_file
+        self, request, user, project, form, assistant, submission, json_file
     ):
         pass
 
@@ -468,23 +468,23 @@ class FormShareTestUserPlugin(plugins.SingletonPlugin):
 
     # IXMLSubmission
     def before_processing_submission(
-            self, request, user, project, form, assistant, xml_file
+        self, request, user, project, form, assistant, xml_file
     ):
         return True, 0
 
     def after_processing_submission(
-            self, request, user, project, form, assistant, error, xml_file
+        self, request, user, project, form, assistant, error, xml_file
     ):
         pass
 
     # IMediaSubmission
     def after_storing_media_in_repository(
-            self, request, user, project, form, assistant, submission, json_file, media_file
+        self, request, user, project, form, assistant, submission, json_file, media_file
     ):
         pass
 
     def after_storing_media_not_in_repository(
-            self, request, user, project, form, assistant, submission, json_file, media_file
+        self, request, user, project, form, assistant, submission, json_file, media_file
     ):
         pass
 
