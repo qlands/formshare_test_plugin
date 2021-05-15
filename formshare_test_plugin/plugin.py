@@ -463,7 +463,7 @@ class FormShareTestUserPlugin(plugins.SingletonPlugin):
         pass
 
     # IEnvironment
-    def after_environment_load(self, settings):
+    def after_environment_load(self, config):
         pass
 
     # IXMLSubmission
