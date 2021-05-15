@@ -60,7 +60,10 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     # IConfig
     def update_config(self, config):
         # We add here the templates of the plugin to the config
-        u.add_templates_directory(config, "/opt/formshare_plugins/templates")
+        templates_dir = os.path.join(config.registry.settings["formshare.test.directory"],
+                                     *["resources", "plugin", "templates"])
+
+        u.add_templates_directory(config, templates_dir)
 
     def get_translation_directory(self):
         module = sys.modules["formshare_test_plugin"]
@@ -71,7 +74,10 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
 
     # IResources
     def add_libraries(self, config):
-        libraries = [u.add_library("test_api", "/opt/formshare_plugins/resources")]
+        resources_dir = os.path.join(config.registry.settings["formshare.test.directory"],
+                                     *["resources", "plugin", "resources"])
+
+        libraries = [u.add_library("test_api", resources_dir)]
         return libraries
 
     def add_js_resources(self, config):
@@ -278,7 +284,7 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
         return True
 
     def after_log_out(self, request, user, redirect_url, logout_headers):
-        pass
+        return redirect_url, logout_headers
 
 
 class FormShareTestAPIPlugin(plugins.SingletonPlugin):
