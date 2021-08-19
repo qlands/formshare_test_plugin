@@ -31,6 +31,11 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IProjectDetailsView)
     plugins.implements(plugins.IFormDetailsView)
     plugins.implements(plugins.ILogOut)
+    plugins.implements(plugins.IPartnerAuthentication)
+
+    # IPartnerAuthentication
+    def after_partner_login(self, request, partner):
+        return True, ""
 
     # IRoutes
     def before_mapping(self, config):
@@ -60,8 +65,10 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     # IConfig
     def update_config(self, config):
         # We add here the templates of the plugin to the config
-        templates_dir = os.path.join(config.registry.settings["formshare.test.directory"],
-                                     *["resources", "plugin", "templates"])
+        templates_dir = os.path.join(
+            config.registry.settings["formshare.test.directory"],
+            *["resources", "plugin", "templates"]
+        )
 
         u.add_templates_directory(config, templates_dir)
 
@@ -74,8 +81,10 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
 
     # IResources
     def add_libraries(self, config):
-        resources_dir = os.path.join(config.registry.settings["formshare.test.directory"],
-                                     *["resources", "plugin", "resources"])
+        resources_dir = os.path.join(
+            config.registry.settings["formshare.test.directory"],
+            *["resources", "plugin", "resources"]
+        )
 
         libraries = [u.add_library("test_api", resources_dir)]
         return libraries
@@ -508,4 +517,26 @@ class FormShareTestObserverPlugin(plugins.SingletonPlugin):
         pass
 
     def after_unload(self, service):
+        pass
+
+
+class FormShareTestPartnerPlugin(plugins.SingletonPlugin):
+    plugins.implements(plugins.IPartner)
+
+    def before_create(self, request, partner_data):
+        return partner_data, True, ""
+
+    def after_create(self, request, partner_data):
+        pass
+
+    def before_edit(self, request, partner_id, partner_data):
+        return partner_data, True, ""
+
+    def after_edit(self, request, partner_id, partner_data):
+        pass
+
+    def before_delete(self, request, partner_id, partner_data):
+        return True, ""
+
+    def after_delete(self, request, partner_id):
         pass
