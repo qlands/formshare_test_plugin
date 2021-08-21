@@ -211,6 +211,11 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     ):
         return True
 
+    def before_partner_download_private_product(
+        self, request, partner, project, form, product, output, file_name, mime_type
+    ):
+        return True
+
     def before_download_public_product(
         self, request, project, form, product, output, file_name, mime_type
     ):
@@ -218,6 +223,11 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
 
     def before_download_product_by_api(
         self, request, project, form, product, output, file_name, mime_type
+    ):
+        return True
+
+    def before_partner_download_product_by_api(
+        self, request, partner, project, form, product, output, file_name, mime_type
     ):
         return True
 
