@@ -3,7 +3,7 @@ import formshare.plugins.utilities as u
 from .views import MyPublicView, MyPrivateView
 import sys
 import os
-
+from pyramid.httpexceptions import HTTPFound
 
 def say_hello():
     pass
@@ -32,6 +32,7 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IFormDetailsView)
     plugins.implements(plugins.ILogOut)
     plugins.implements(plugins.IPartnerAuthentication)
+    plugins.implements(plugins.IExport)
 
     # IPartnerAuthentication
     def after_partner_login(self, request, partner):
@@ -305,6 +306,13 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     def after_log_out(self, request, user, redirect_url, logout_headers):
         return redirect_url, logout_headers
 
+    # IExport
+    def has_export_for(self, request, export_type):
+        if export_type == "TEST":
+            return True
+
+    def do_export(self, request, export_type):
+        return HTTPFound(location=request.route_url("home"))
 
 class FormShareTestAPIPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAPIRoutes)
