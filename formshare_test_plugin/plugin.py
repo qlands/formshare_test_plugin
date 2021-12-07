@@ -5,6 +5,7 @@ import sys
 import os
 from pyramid.httpexceptions import HTTPFound
 
+
 def say_hello():
     pass
 
@@ -251,7 +252,7 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
         post_data,
         ignore_xform,
     ):
-        return None
+        return request.route_url("home")
 
     # IRepository
     def before_creating_repository(
@@ -313,6 +314,7 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
 
     def do_export(self, request, export_type):
         return HTTPFound(location=request.route_url("home"))
+
 
 class FormShareTestAPIPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAPIRoutes)
