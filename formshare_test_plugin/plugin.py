@@ -560,3 +560,9 @@ class FormShareTestPartnerPlugin(plugins.SingletonPlugin):
 
     def after_delete(self, request, partner_id):
         pass
+
+    def before_password_change(self, request, partner_id, password):
+        return True, ""
+
+    def after_password_change(self, request, partner_id, password):
+        pass
