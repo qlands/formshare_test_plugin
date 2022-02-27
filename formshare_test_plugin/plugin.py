@@ -114,6 +114,9 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     def update_extendable_tables(self, tables_allowed):
         return tables_allowed
 
+    def update_extendable_modules(self, modules_allowed):
+        return modules_allowed
+
     # IProject
     def before_create(self, request, user, project_data):
         return project_data, True, ""
