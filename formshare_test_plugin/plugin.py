@@ -28,9 +28,6 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IImportExternalData)
     plugins.implements(plugins.IRepository)
     plugins.implements(plugins.IPublicView)
-    plugins.implements(plugins.IDashBoardView)
-    plugins.implements(plugins.IProjectDetailsView)
-    plugins.implements(plugins.IFormDetailsView)
     plugins.implements(plugins.ILogOut)
     plugins.implements(plugins.IPartnerAuthentication)
     plugins.implements(plugins.IExport)
@@ -294,18 +291,6 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     def after_processing(self, request, context):
         return context
 
-    # IDashBoardView
-    def after_dashboard_processing(self, request, class_data, context):
-        return context
-
-    # IProjectDetailsView
-    def after_project_details_processing(self, request, class_data, context):
-        return context
-
-    # IFormDetailsView
-    def after_form_details_processing(self, request, class_data, context):
-        return context
-
     # ILogOut
     def before_log_out(self, request, user, continue_logout):
         return True
@@ -325,6 +310,7 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
 class FormShareTestAPIPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAPIRoutes)
     plugins.implements(plugins.IPrivateView)
+    plugins.implements(plugins.IAssistantView)
 
     def before_mapping(self, config):
         # We don't add any routes before the host application
@@ -342,8 +328,17 @@ class FormShareTestAPIPlugin(plugins.SingletonPlugin):
 
         return custom_map
 
-    def before_processing(self, request, class_data):
+    def before_processing(self, route_name, request, class_data):
         pass
+
+    def after_processing(self, route_name, request, class_data, context):
+        return context
+
+    def before_processing_assistant_view(self, route_name, request, context):
+        pass
+
+    def after_processing_assistant_view(self, route_name, request, context):
+        return context
 
 
 class FormShareTestAssistantPlugin(plugins.SingletonPlugin):
