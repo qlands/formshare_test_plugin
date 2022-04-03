@@ -311,6 +311,7 @@ class FormShareTestAPIPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAPIRoutes)
     plugins.implements(plugins.IPrivateView)
     plugins.implements(plugins.IAssistantView)
+    plugins.implements(plugins.IPartnerView)
 
     def before_mapping(self, config):
         # We don't add any routes before the host application
@@ -338,6 +339,12 @@ class FormShareTestAPIPlugin(plugins.SingletonPlugin):
         pass
 
     def after_processing_assistant_view(self, route_name, request, context):
+        return context
+
+    def before_processing_partner_view(self, route_name, request, context):
+        pass
+
+    def after_processing_partner_view(self, route_name, request, context):
         return context
 
 
