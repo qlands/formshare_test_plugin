@@ -287,7 +287,7 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
 
     # IPublicView
     def before_processing_public_view(self, route_name, request):
-        return None
+        return True
 
     def after_processing_public_view(self, route_name, request, context):
         return context
