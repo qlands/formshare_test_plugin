@@ -31,6 +31,7 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.ILogOut)
     plugins.implements(plugins.IPartnerAuthentication)
     plugins.implements(plugins.IExport)
+    plugins.implements(plugins.IAssistantAuthentication)
 
     # IPartnerAuthentication
     def after_partner_login(self, request, partner):
@@ -180,7 +181,7 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     def on_authenticate_password(self, request, user_data, password):
         return None, None
 
-    def after_collaborator_login(self, request, collaborator):
+    def after_assistant_login(self, request, collaborator):
         return True, ""
 
     # IUserAuthorization
