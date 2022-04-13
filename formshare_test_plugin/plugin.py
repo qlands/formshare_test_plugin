@@ -286,10 +286,10 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
         pass
 
     # IPublicView
-    def before_processing(self, request):
+    def before_processing_public_view(self, route_name, request):
         return None
 
-    def after_processing(self, request, context):
+    def after_processing_public_view(self, route_name, request, context):
         return context
 
     # ILogOut
