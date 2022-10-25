@@ -10,6 +10,7 @@ def say_hello():
     pass
 
 
+# noinspection PyMethodMayBeStatic,PyUnusedLocal
 class FormShareTestPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IRoutes)
     plugins.implements(plugins.IConfig)
@@ -32,6 +33,7 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IPartnerAuthentication)
     plugins.implements(plugins.IExport)
     plugins.implements(plugins.IAssistantAuthentication)
+    plugins.implements(plugins.ICollaborator)
 
     # IPartnerAuthentication
     def after_partner_login(self, request, partner):
@@ -161,7 +163,9 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     def before_deleting_form(self, request, form_type, user_id, project_id, form_id):
         return True, ""
 
-    def after_deleting_form(self, request, form_type, user_id, project_id, form_id):
+    def after_deleting_form(
+        self, request, form_type, user_id, project_id, form_id, form_data
+    ):
         pass
 
     # IRegistration
@@ -307,21 +311,35 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     def do_export(self, request, export_type):
         return HTTPFound(location=request.route_url("home"))
 
+    # ICollaborator
+    def before_adding_collaborator(self, request, project_id, collaborator_id):
+        return True, ""
 
+    def after_accepting_collaboration(self, request, project_id, collaborator_id):
+        pass
+
+    def before_removing_collaborator(self, request, project_id, collaborator_id):
+        return True, ""
+
+    def after_removing_collaborator(self, request, project_id, collaborator_id):
+        pass
+
+
+# noinspection PyUnusedLocal,PyMethodMayBeStatic
 class FormShareTestAPIPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAPIRoutes)
     plugins.implements(plugins.IPrivateView)
     plugins.implements(plugins.IAssistantView)
     plugins.implements(plugins.IPartnerView)
 
-    def before_mapping(self, config):
+    def after_api_mapping(self, config):
         # We don't add any routes before the host application
         custom_map = [
             u.add_route("api_before_map", "/before_map", MyPublicView, None),
         ]
         return custom_map
 
-    def after_mapping(self, config):
+    def after_api_mapping(self, config):
         # We add here a new route /json that returns a JSON
         custom_map = [
             u.add_route("api_after_map", "/before_map", MyPublicView, None),
@@ -349,36 +367,45 @@ class FormShareTestAPIPlugin(plugins.SingletonPlugin):
         return context
 
 
+# noinspection PyMethodMayBeStatic,PyUnusedLocal
 class FormShareTestAssistantPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAssistant)
     plugins.implements(plugins.IFormAccess)
 
-    def before_create(self, request, user, project, assistant_data):
+    def before_creating_assistant(self, request, user, project, assistant_data):
         return assistant_data, True, ""
 
-    def after_create(self, request, user, project, assistant_data):
+    def after_creating_assistant(self, request, user, project, assistant_data):
         pass
 
-    def before_edit(self, request, user, project, assistant, assistant_data):
+    def before_editing_assistant(
+        self, request, user, project, assistant, assistant_data
+    ):
         return assistant_data, True, ""
 
-    def after_edit(self, request, user, project, assistant, assistant_data):
+    def after_editing_assistant(
+        self, request, user, project, assistant, assistant_data
+    ):
         pass
 
-    def before_delete(self, request, user, project, assistant):
+    def before_deleting_assistant(self, request, user, project, assistant):
         return True, ""
 
-    def after_delete(self, request, user, project, assistant):
+    def after_deleting_assistant(self, request, user, project, assistant):
         pass
 
-    def before_password_change(self, request, user, project, assistant, password):
+    def before_assistant_password_change(
+        self, request, user, project, assistant, password
+    ):
         return True, ""
 
-    def after_password_change(self, request, user, project, assistant, password):
+    def after_assistant_password_change(
+        self, request, user, project, assistant, password
+    ):
         pass
 
     # IFormAccess
-    def before_giving_access(
+    def before_giving_access_to_assistant(
         self,
         request,
         user,
@@ -390,7 +417,7 @@ class FormShareTestAssistantPlugin(plugins.SingletonPlugin):
     ):
         return privilege_data, True, ""
 
-    def after_giving_access(
+    def after_giving_access_to_assistant(
         self,
         request,
         user,
@@ -402,7 +429,7 @@ class FormShareTestAssistantPlugin(plugins.SingletonPlugin):
     ):
         pass
 
-    def before_editing_access(
+    def before_editing_assistant_access(
         self,
         request,
         user,
@@ -414,7 +441,7 @@ class FormShareTestAssistantPlugin(plugins.SingletonPlugin):
     ):
         return privilege_data, True, ""
 
-    def after_editing_access(
+    def after_editing_assistant_access(
         self,
         request,
         user,
@@ -426,47 +453,48 @@ class FormShareTestAssistantPlugin(plugins.SingletonPlugin):
     ):
         pass
 
-    def before_revoking_access(
+    def before_revoking_assistant_access(
         self, request, user, project, form, assistant_project, assistant_id
     ):
         return True, ""
 
-    def after_revoking_access(
+    def after_revoking_assistant_access(
         self, request, user, project, form, assistant_project, assistant_id
     ):
         pass
 
 
+# noinspection PyUnusedLocal,PyMethodMayBeStatic
 class FormShareTestAssistantGroupPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAssistantGroup)
     plugins.implements(plugins.IFormGroupAccess)
     plugins.implements(plugins.IJSONSubmission)
 
-    def before_create(self, request, user, project, group_data):
+    def before_creating_group(self, request, user, project, group_data):
         return group_data, True, ""
 
-    def after_create(self, request, user, project, group_data):
+    def after_creating_group(self, request, user, project, group_data):
         pass
 
-    def before_edit(self, request, user, project, assistant, group_data):
+    def before_editing_group(self, request, user, project, assistant, group_data):
         return group_data, True, ""
 
-    def after_edit(self, request, user, project, assistant, group_data):
+    def after_editing_group(self, request, user, project, assistant, group_data):
         pass
 
-    def before_delete(self, request, user, project, group, group_data):
+    def before_deleting_group(self, request, user, project, group, group_data):
         return True, ""
 
-    def after_delete(self, request, user, project, group, group_data):
+    def after_deleting_group(self, request, user, project, group, group_data):
         pass
 
     # IFormGroupAccess
-    def before_giving_access(
+    def before_giving_access_to_group(
         self, request, user, project, form, group_project, assistant_group
     ):
         return True, ""
 
-    def after_giving_access(
+    def after_giving_access_to_group(
         self, request, user, project, form, group_project, group_id
     ):
         pass
@@ -488,22 +516,23 @@ class FormShareTestAssistantGroupPlugin(plugins.SingletonPlugin):
         pass
 
 
+# noinspection PyUnusedLocal,PyMethodMayBeStatic
 class FormShareTestUserPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IUser)
     plugins.implements(plugins.IEnvironment)
     plugins.implements(plugins.IXMLSubmission)
     plugins.implements(plugins.IMediaSubmission)
 
-    def before_create(self, request, user_data):
+    def before_creating_user(self, request, user_data):
         return user_data, True, ""
 
-    def after_create(self, request, user_data):
+    def after_creating_user(self, request, user_data):
         pass
 
-    def before_edit(self, request, user, user_data):
+    def before_editing_user(self, request, user, user_data):
         return user_data, True, ""
 
-    def after_edit(self, request, user, user_data):
+    def after_editing_user(self, request, user, user_data):
         pass
 
     # IEnvironment
@@ -549,29 +578,30 @@ class FormShareTestObserverPlugin(plugins.SingletonPlugin):
         pass
 
 
+# noinspection PyUnusedLocal,PyMethodMayBeStatic
 class FormShareTestPartnerPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IPartner)
 
-    def before_create(self, request, partner_data):
+    def before_creating_partner(self, request, partner_data):
         return partner_data, True, ""
 
-    def after_create(self, request, partner_data):
+    def after_creating_partner(self, request, partner_data):
         pass
 
-    def before_edit(self, request, partner_id, partner_data):
+    def before_editing_partner(self, request, partner_id, partner_data):
         return partner_data, True, ""
 
-    def after_edit(self, request, partner_id, partner_data):
+    def after_editing_partner(self, request, partner_id, partner_data):
         pass
 
-    def before_delete(self, request, partner_id, partner_data):
+    def before_deleting_partner(self, request, partner_id, partner_data):
         return True, ""
 
-    def after_delete(self, request, partner_id):
+    def after_deleting_partner(self, request, partner_id):
         pass
 
-    def before_password_change(self, request, partner_id, password):
+    def before_partner_password_change(self, request, partner_id, password):
         return True, ""
 
-    def after_password_change(self, request, partner_id, password):
+    def after_partner_password_change(self, request, partner_id, password):
         pass
