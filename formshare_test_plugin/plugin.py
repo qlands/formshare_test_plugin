@@ -118,10 +118,22 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
         return modules_allowed
 
     # IProject
-    def before_create(self, request, user, project_data):
-        return project_data, True, ""
+    def before_creating_project(self, request, user, project_data):
+        return True, ""
 
-    def after_create(self, request, user, project_data):
+    def after_creating_project(self, request, user, project_data):
+        pass
+
+    def before_editing_project(self, request, user, project, project_details):
+        return True, ""
+
+    def after_editing_project(self, request, user, project_data):
+        pass
+
+    def before_deleting_project(self, request, user, project):
+        return True, ""
+
+    def after_deleting_project(self, request, user, project, project_forms):
         pass
 
     # IForm
@@ -318,10 +330,10 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     def after_accepting_collaboration(self, request, project_id, collaborator_id):
         pass
 
-    def before_removing_collaborator(self, request, project_id, collaborator_id):
+    def before_removing_collaborator(self, request, project_id, collaborator_id, collaboration_details):
         return True, ""
 
-    def after_removing_collaborator(self, request, project_id, collaborator_id):
+    def after_removing_collaborator(self, request, project_id, collaborator_id, collaboration_details):
         pass
 
 
@@ -339,7 +351,7 @@ class FormShareTestAPIPlugin(plugins.SingletonPlugin):
         ]
         return custom_map
 
-    def after_api_mapping(self, config):
+    def before_api_mapping(self, config):
         # We add here a new route /json that returns a JSON
         custom_map = [
             u.add_route("api_after_map", "/before_map", MyPublicView, None),
