@@ -4,7 +4,9 @@ from .views import MyPublicView, MyPrivateView
 import sys
 import os
 from pyramid.httpexceptions import HTTPFound
-
+from formshare.processes.odk.api import get_odk_path, get_form_schema
+import csv
+import uuid
 
 def say_hello():
     pass
@@ -34,6 +36,8 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IExport)
     plugins.implements(plugins.IAssistantAuthentication)
     plugins.implements(plugins.ICollaborator)
+    plugins.implements(plugins.IFormFileGenerator)
+    plugins.implements(plugins.IFormDataColumns)
 
     # IPartnerAuthentication
     def after_partner_login(self, request, partner):
@@ -335,6 +339,68 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
 
     def after_removing_collaborator(self, request, project_id, collaborator_id, collaboration_details):
         pass
+
+    # IFormFileGenerator
+    def generate_form_file(self, request, user_id, project_id, form_id, file_name):
+        if file_name == "generated.csv" or file_name == "generated_case.csv":
+            odk_dir = get_odk_path(request)
+            uid = str(uuid.uuid4())
+
+            paths = ["tmp", uid]
+            os.makedirs(os.path.join(odk_dir, *paths))
+
+            paths = ["tmp", uid, file_name]
+            temp_csv = os.path.join(odk_dir, *paths)
+            outfile = open(temp_csv, "w")
+            out_csv = csv.writer(outfile)
+            if get_form_schema(request, project_id, form_id) is None:
+                heading = ["list_name", "name", "label", "country_id"]
+                out_csv.writerow(x for x in heading)
+                row = ["projects", "001", "Test project", "UG"]
+                out_csv.writerow(x for x in row)
+            else:
+                heading = ["list_name", "name", "label", "country_id"]
+                out_csv.writerow(x for x in heading)
+                row = ["projects", "001", "Test project", "UG"]
+                out_csv.writerow(x for x in row)
+                row = ["projects", "002", "Test project 2", "UG"]
+                out_csv.writerow(x for x in row)
+            outfile.close()
+            return temp_csv
+        return None
+
+    # IFormDataColumns
+    def filter_form_survey_columns(
+            self, request, user_id, project_id, form_id, survey_columns
+    ):
+        pass
+
+    def filter_form_choices_columns(
+            self, request, user_id, project_id, form_id, choices_columns
+    ):
+        pass
+
+    def add_to_form_survey_columns(
+            self, request, user_id, project_id, form_id, survey_columns
+    ):
+        pass
+
+    def add_to_form_choices_columns(
+            self, request, user_id, project_id, form_id, choices_columns
+    ):
+        pass
+
+    def get_form_survey_property_info(
+            self,
+            request,
+            user_id,
+            project_id,
+            form_id,
+            table_name,
+            field_name,
+            property_name,
+    ):
+        return property_name, False
 
 
 # noinspection PyUnusedLocal,PyMethodMayBeStatic
