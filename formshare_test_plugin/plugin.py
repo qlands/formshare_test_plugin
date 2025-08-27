@@ -489,8 +489,7 @@ class FormShareTestAssistantPlugin(plugins.SingletonPlugin):
         user,
         project,
         form,
-        assistant_project,
-        assistant_id,
+        assistant_uuid,
         privilege_data,
     ):
         return privilege_data, True, ""
@@ -501,8 +500,7 @@ class FormShareTestAssistantPlugin(plugins.SingletonPlugin):
         user,
         project,
         form,
-        assistant_project,
-        assistant_id,
+        assistant_uuid,
         privilege_data,
     ):
         pass
@@ -513,8 +511,7 @@ class FormShareTestAssistantPlugin(plugins.SingletonPlugin):
         user,
         project,
         form,
-        assistant_project,
-        assistant_id,
+        assistant_uuid,
         privilege_data,
     ):
         return privilege_data, True, ""
@@ -525,19 +522,18 @@ class FormShareTestAssistantPlugin(plugins.SingletonPlugin):
         user,
         project,
         form,
-        assistant_project,
-        assistant_id,
+        assistant_uuid,
         privilege_data,
     ):
         pass
 
     def before_revoking_assistant_access(
-        self, request, user, project, form, assistant_project, assistant_id
+        self, request, user, project, form, assistant_uuid
     ):
         return True, ""
 
     def after_revoking_assistant_access(
-        self, request, user, project, form, assistant_project, assistant_id
+        self, request, user, project, form, assistant_uuid
     ):
         pass
 
