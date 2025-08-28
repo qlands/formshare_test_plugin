@@ -457,28 +457,28 @@ class FormShareTestAssistantPlugin(plugins.SingletonPlugin):
         pass
 
     def before_editing_assistant(
-        self, request, user, assistant_uuid, assistant_data
+        self, request, user, project, assistant, assistant_data
     ):
         return assistant_data, True, ""
 
     def after_editing_assistant(
-        self, request, user, assistant_uuid, assistant_data
+        self, request, user, project, assistant, assistant_data
     ):
         pass
 
-    def before_deleting_assistant(self, request, user, assistant_uuid):
+    def before_deleting_assistant(self, request, user, project, assistant):
         return True, ""
 
-    def after_deleting_assistant(self, request, user,assistant_uuid):
+    def after_deleting_assistant(self, request, user, project, assistant):
         pass
 
     def before_assistant_password_change(
-        self, request, user, assistant_uuid, password
+        self, request, user, project, assistant, password
     ):
         return True, ""
 
     def after_assistant_password_change(
-        self, request, user, assistant_uuid, password
+        self, request, user, project, assistant, password
     ):
         pass
 
