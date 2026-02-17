@@ -38,6 +38,13 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.ICollaborator)
     plugins.implements(plugins.IFormFileGenerator)
     plugins.implements(plugins.IFormDataColumns)
+    plugins.implements(plugins.IRoles)
+
+
+    # IRoles
+    def get_roles(self, settings):
+        return []
+
 
     # IPartnerAuthentication
     def after_partner_login(self, request, partner):
