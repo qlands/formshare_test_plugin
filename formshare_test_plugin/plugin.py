@@ -8,6 +8,7 @@ from formshare.processes.odk.api import get_odk_path, get_form_schema
 import csv
 import uuid
 
+
 def say_hello():
     pass
 
@@ -40,11 +41,9 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IFormDataColumns)
     plugins.implements(plugins.IRoles)
 
-
     # IRoles
     def get_roles(self, settings):
         return []
-
 
     # IPartnerAuthentication
     def after_partner_login(self, request, partner):
@@ -340,10 +339,14 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     def after_accepting_collaboration(self, request, project_id, collaborator_id):
         pass
 
-    def before_removing_collaborator(self, request, project_id, collaborator_id, collaboration_details):
+    def before_removing_collaborator(
+        self, request, project_id, collaborator_id, collaboration_details
+    ):
         return True, ""
 
-    def after_removing_collaborator(self, request, project_id, collaborator_id, collaboration_details):
+    def after_removing_collaborator(
+        self, request, project_id, collaborator_id, collaboration_details
+    ):
         pass
 
     # IFormFileGenerator
@@ -377,34 +380,34 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
 
     # IFormDataColumns
     def filter_form_survey_columns(
-            self, request, user_id, project_id, form_id, survey_columns
+        self, request, user_id, project_id, form_id, survey_columns
     ):
         pass
 
     def filter_form_choices_columns(
-            self, request, user_id, project_id, form_id, choices_columns
+        self, request, user_id, project_id, form_id, choices_columns
     ):
         pass
 
     def add_to_form_survey_columns(
-            self, request, user_id, project_id, form_id, survey_columns
+        self, request, user_id, project_id, form_id, survey_columns
     ):
         pass
 
     def add_to_form_choices_columns(
-            self, request, user_id, project_id, form_id, choices_columns
+        self, request, user_id, project_id, form_id, choices_columns
     ):
         pass
 
     def get_form_survey_property_info(
-            self,
-            request,
-            user_id,
-            project_id,
-            form_id,
-            table_name,
-            field_name,
-            property_name,
+        self,
+        request,
+        user_id,
+        project_id,
+        form_id,
+        table_name,
+        field_name,
+        property_name,
     ):
         return property_name, False
 
@@ -462,30 +465,22 @@ class FormShareTestAssistantPlugin(plugins.SingletonPlugin):
     def after_creating_assistant(self, request, user, project, assistant_data):
         pass
 
-    def before_editing_assistant(
-        self, request, user, assistant_uuid, assistant_data
-    ):
+    def before_editing_assistant(self, request, user, assistant_uuid, assistant_data):
         return assistant_data, True, ""
 
-    def after_editing_assistant(
-        self, request, user, assistant_uuid, assistant_data
-    ):
+    def after_editing_assistant(self, request, user, assistant_uuid, assistant_data):
         pass
 
     def before_deleting_assistant(self, request, user, assistant_uuid):
         return True, ""
 
-    def after_deleting_assistant(self, request, user,assistant_uuid):
+    def after_deleting_assistant(self, request, user, assistant_uuid):
         pass
 
-    def before_assistant_password_change(
-        self, request, user, assistant_uuid, password
-    ):
+    def before_assistant_password_change(self, request, user, assistant_uuid, password):
         return True, ""
 
-    def after_assistant_password_change(
-        self, request, user, assistant_uuid, password
-    ):
+    def after_assistant_password_change(self, request, user, assistant_uuid, password):
         pass
 
     # IFormAccess
@@ -639,22 +634,6 @@ class FormShareTestUserPlugin(plugins.SingletonPlugin):
     def after_storing_media_not_in_repository(
         self, request, user, project, form, assistant, submission, json_file, media_file
     ):
-        pass
-
-
-class FormShareTestObserverPlugin(plugins.SingletonPlugin):
-    plugins.implements(plugins.IPluginObserver)
-
-    def before_load(self, plugin):
-        pass
-
-    def after_load(self, service):
-        pass
-
-    def before_unload(self, plugin):
-        pass
-
-    def after_unload(self, service):
         pass
 
 

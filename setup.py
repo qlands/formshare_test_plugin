@@ -39,7 +39,6 @@ setup(
             "formshare_assistant_plugin = formshare_test_plugin.plugin:FormShareTestAssistantPlugin",
             "formshare_group_plugin = formshare_test_plugin.plugin:FormShareTestAssistantGroupPlugin",
             "formshare_user_plugin = formshare_test_plugin.plugin:FormShareTestUserPlugin",
-            "formshare_observer_plugin = formshare_test_plugin.plugin:FormShareTestObserverPlugin",
             "formshare_partner_plugin =  formshare_test_plugin.plugin:FormShareTestPartnerPlugin",
         ],
         "formshare.tasks": [
