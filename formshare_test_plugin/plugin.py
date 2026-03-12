@@ -575,6 +575,12 @@ class FormShareTestAssistantGroupPlugin(plugins.SingletonPlugin):
         pass
 
     # IJSONSubmission
+
+    def before_storing_submission(
+            self, request, user, project, form, assistant, json_file
+    ):
+        return True, ""
+
     def before_processing_submission(
         self, request, user, project, form, assistant, json_file
     ):
