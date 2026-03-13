@@ -544,6 +544,7 @@ class FormShareTestAssistantGroupPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAssistantGroup)
     plugins.implements(plugins.IFormGroupAccess)
     plugins.implements(plugins.IJSONSubmission)
+    plugins.implements(plugins.IDeleteSubmission)
 
     def before_creating_group(self, request, user, project, group_data):
         return group_data, True, ""
@@ -593,6 +594,17 @@ class FormShareTestAssistantGroupPlugin(plugins.SingletonPlugin):
 
     def after_processing_submission_not_in_repository(
         self, request, user, project, form, assistant, submission, json_file
+    ):
+        pass
+
+    # IDeleteSubmission
+    def before_deleting_submission(
+            self, request, user, project, form, submission
+    ):
+        return True, ""
+
+    def after_deleting_submission(
+            self, request, user, project, form, submission, submission_directory
     ):
         pass
 
