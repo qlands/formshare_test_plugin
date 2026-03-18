@@ -3,7 +3,7 @@ import formshare.plugins.utilities as u
 from .views import MyPublicView, MyPrivateView
 import sys
 import os
-from pyramid.httpexceptions import HTTPFound
+from formshare.middleware.httpexceptions import HTTPFound
 from formshare.processes.odk.api import get_odk_path, get_form_schema
 import csv
 import uuid
