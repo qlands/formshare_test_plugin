@@ -264,7 +264,7 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
         return True
 
     def before_deleting_product(self, request, project, form, product, output):
-        return True
+        return True,""
 
     def after_deleting_product(self, request, project, form, product, output):
         pass
