@@ -6,6 +6,7 @@ import os
 from formshare.middleware.httpexceptions import HTTPFound
 from formshare.processes.odk.api import get_odk_path, get_form_schema
 import csv
+import json
 import uuid
 
 
@@ -238,6 +239,9 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
         else:
             return None
 
+    def update_products(self, config, products):
+        return products
+
     def before_download_private_product(
         self, request, project, form, product, output, file_name, mime_type
     ):
@@ -264,7 +268,7 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
         return True
 
     def before_deleting_product(self, request, project, form, product, output):
-        return True,""
+        return True, ""
 
     def after_deleting_product(self, request, project, form, product, output):
         pass
@@ -382,6 +386,38 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
                 out_csv.writerow(x for x in row)
             outfile.close()
             return temp_csv
+        if file_name == "generated.geojson":
+            odk_dir = get_odk_path(request)
+            uid = str(uuid.uuid4())
+
+            paths = ["tmp", uid]
+            os.makedirs(os.path.join(odk_dir, *paths))
+
+            paths = ["tmp", uid, file_name]
+            temp_geojson = os.path.join(odk_dir, *paths)
+            features = [
+                {
+                    "type": "Feature",
+                    "id": "gp1",
+                    "geometry": {"type": "Point", "coordinates": [7.08, 46.58]},
+                    "properties": {"title": "First place", "annual_visits": 10},
+                }
+            ]
+            if get_form_schema(request, project_id, form_id) is not None:
+                # Once the form has a repository the generated file gains a
+                # feature, so that FormShare has a change to carry into the
+                # lookup. This is what the CSV above does with its second row.
+                features.append(
+                    {
+                        "type": "Feature",
+                        "id": "gp2",
+                        "geometry": {"type": "Point", "coordinates": [7.09, 46.59]},
+                        "properties": {"title": "Second place", "annual_visits": 20},
+                    }
+                )
+            with open(temp_geojson, "w") as outfile:
+                json.dump({"type": "FeatureCollection", "features": features}, outfile)
+            return temp_geojson
         return None
 
     # IFormDataColumns
@@ -584,7 +620,7 @@ class FormShareTestAssistantGroupPlugin(plugins.SingletonPlugin):
     # IJSONSubmission
 
     def before_storing_submission(
-            self, request, user, project, form, assistant, json_file
+        self, request, user, project, form, assistant, json_file
     ):
         return True, ""
 
@@ -604,13 +640,11 @@ class FormShareTestAssistantGroupPlugin(plugins.SingletonPlugin):
         pass
 
     # IDeleteSubmission
-    def before_deleting_submission(
-            self, request, user, project, form, submission
-    ):
+    def before_deleting_submission(self, request, user, project, form, submission):
         return True, ""
 
     def after_deleting_submission(
-            self, request, user, project, form, submission, submission_directory
+        self, request, user, project, form, submission, submission_directory
     ):
         pass
 
