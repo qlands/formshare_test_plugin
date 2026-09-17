@@ -41,6 +41,15 @@ class FormShareTestPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IFormFileGenerator)
     plugins.implements(plugins.IFormDataColumns)
     plugins.implements(plugins.IRoles)
+    plugins.implements(plugins.IFeature)
+
+    # IFeature
+    def feature_exist(self, feature_code):
+        features = ["workflows"]
+        if feature_code in features:
+            return True
+        else:
+            return False
 
     # IRoles
     def get_roles(self, settings):
