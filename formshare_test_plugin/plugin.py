@@ -653,7 +653,17 @@ class FormShareTestAssistantGroupPlugin(plugins.SingletonPlugin):
         return True, ""
 
     def after_deleting_submission(
-        self, request, user, project, form, submission, submission_directory
+        self,
+        request,
+        user,
+        project,
+        form,
+        submission,
+        submission_directory,
+        row_uuid,
+        deleted_by,
+        moved_to_logs,
+        reason,
     ):
         pass
 
