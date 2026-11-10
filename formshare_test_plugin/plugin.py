@@ -717,6 +717,29 @@ class FormShareTestUserPlugin(plugins.SingletonPlugin):
 # noinspection PyUnusedLocal,PyMethodMayBeStatic
 class FormShareTestPartnerPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IPartner)
+    # IFormList came with FormShare master-3.0 on 2026-11-10. The stable
+    # branches' CI installs this branch too, and there the plugin would not
+    # import at all
+    if hasattr(plugins, "IFormList"):
+        plugins.implements(plugins.IFormList)
+
+    def filter_form_list(
+        self, request, project_id, assistant_uuid, device_uuid, entries
+    ):
+        # FormShare's step form_list_hook.py: of the forms named hook_*, the
+        # device hook-device-1 is not offered hook_hidden, and each one names
+        # the device asking and the assistant. Every other form passes as it
+        # came, so no other step's list changes.
+        listed = []
+        for form, elements in entries:
+            if form["form_id"].startswith("hook_") and device_uuid is not None:
+                if device_uuid == "hook-device-1" and form["form_id"] == "hook_hidden":
+                    continue
+                elements = dict(elements)
+                elements["fs:hookdevice"] = device_uuid
+                elements["fs:hookassistant"] = assistant_uuid or "none"
+            listed.append((form, elements))
+        return listed
 
     def before_creating_partner(self, request, partner_data):
         return partner_data, True, ""
